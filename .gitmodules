@@ -1,3 +1,6 @@
 [submodule "kgqa/buboqa"]
 	path = kgqa/buboqa
 	url = https://github.com/saist1993/BuboQA.git
+[submodule "auto"]
+	path = auto
+	url = https://github.com/geraltofrivia/robustness.git

@@ -1,0 +1,32 @@
+[{
+ "_profile": "all",
+  "distribution": {
+    "Rule1": 1.0,
+    "Rule2": 1.0,
+    "Rule3": 1.0,
+    "Rule4": 1.0,
+    "Rule5": 1.0,
+    "Rule6": 1.0,
+    "Rule7": 1.0,
+    "Rule8": 1.0,
+    "Rule13": 1.0,
+    "Rule15": 1.0,
+    "Rule16": 1.0
+  }
+},
+{
+ "_profile": "half",
+  "distribution": {
+    "Rule1": 0.5,
+    "Rule2": 0.5,
+    "Rule3": 0.5,
+    "Rule4": 0.5,
+    "Rule5": 0.5,
+    "Rule6": 0.5,
+    "Rule7": 0.5,
+    "Rule8": 0.5,
+    "Rule13": 0.5,
+    "Rule15": 0.5,
+    "Rule16": 0.5
+  }
+}]

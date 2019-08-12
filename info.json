@@ -1,4 +1,10 @@
 {
-  "datasets": ["lcquad", "simplequestions"],
+  "datasets": {
+    "lcquad": {
+      "train": "train-data.json",
+      "test": "test-data.json"
+    },
+    "simplequestions": "red"
+  },
   "_comment": "using this json for more configurability of code"
 }

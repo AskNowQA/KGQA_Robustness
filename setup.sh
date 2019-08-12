@@ -18,9 +18,10 @@ cd ../../..
 # TODO: pull raw simplequestions, other things
 
 
-# Get needed repos
-mkdir auto
-git clone https://github.com/geraltofrivia/robustness.git auto
+# Init needed repos
+cd auto
+./setup.sh
+cd ..
 
 # Get KGQA systems
 mkdir kgqa/krantikari
