@@ -1,0 +1,4 @@
+{
+  "datasets": ["lcquad", "simplequestions"],
+  "_comment": "using this json for more configurability of code"
+}
