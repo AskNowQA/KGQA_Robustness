@@ -1,0 +1,3 @@
+[submodule "BuboQA"]
+	path = BuboQA
+	url = https://github.com/saist1993/BuboQA.git
