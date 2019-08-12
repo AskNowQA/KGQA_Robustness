@@ -24,7 +24,7 @@ git clone https://github.com/geraltofrivia/robustness.git auto
 
 # Get KGQA systems
 mkdir kgqa
-mkdir kgqa/buboqacd 
+mkdir kgqa/buboqa
 mkdir kgqa/krantikari
 
 # @TODO: @Gaurav add the link here
