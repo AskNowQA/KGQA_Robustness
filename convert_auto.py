@@ -4,11 +4,18 @@
 """
 import sys
 import json
+import spacy
+import traceback
+from tqdm import tqdm
 sys.path.append('./auto')
 
 # Local/Custom imports
-from utils import *
+from utilities import load_lcquad, InflectionError
 from auto import rules
+
+# Important globals
+nlp = spacy.load("en_core_web_sm")
+RULES_PROFILE = 'all'
 
 with open("./info.json", 'r') as config_file:
     config = json.load(config_file)
@@ -18,14 +25,40 @@ lcquad = load_lcquad()
 simplequestions = None # @TODO
 
 # Get all relevant rules and their distribution
-with open("./rules_dist","r") as rules_file:
+with open("./rules_dist.json", "r") as rules_file:
     rules_dists = json.load(rules_file)
 
 # Use "all" rules for now
-rules_dist = [x for x in rules_dists if x['_profile'] == "all"][0]
+rules_dist = [x for x in rules_dists if x['_profile'] == RULES_PROFILE][0]
 
-for rule_name in rules_dist['distribution'].keys():
+# Initialize the rule classes and put it in the dictionary as well.
+for rule_name, rule_prob in rules_dist['distribution'].items():
     # Pull out the rule implementation
+    rule_obj = getattr(rules, rule_name)(nlp)
+    rules_dist['distribution'][rule_name] = (rule_prob, rule_obj)
+
+'''
+    Now loop over the dataset(s) and inflect it.
+'''
+
+# LC-QuAD inflections
+for i, datum in enumerate(lcquad['raw']['train']):
+    raw, inflected = datum['corrected_question'], []
+    for rule_name, (rule_prob, rule_obj) in rules_dist['distribution'].items():
+        # Make a doc of input
+        raw_spacied = nlp(raw)
+        try:
+            inflected.append([rule_name, rule_obj.apply(raw_spacied, rule_prob)])
+        except TypeError:
+            traceback.print_exc()
+            print(raw)
+            raise InflectionError
+
+    lcquad['auto'].setdefault('train', []).append(inflected)
+
+print(lcquad['auto']['train'][0:10])
+
+
 
 
 

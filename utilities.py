@@ -4,12 +4,16 @@ import json
 DATA_DIR = Path('./data')
 
 
+class InflectionError(Exception): pass
+
+
 def load_lcquad():
     lcquad = {
         "rawdir": DATA_DIR/"raw"/"lcquad",
         "autodir": DATA_DIR/"auto"/"lcquad",
-        "golddir": DATA_DIR/"gold"/"lcquad"
-        "raw": {}
+        "golddir": DATA_DIR/"gold"/"lcquad",
+        "raw": {},
+        "auto": {}
     }
 
     with open(DATA_DIR/"raw"/"lcquad"/"test-data.json", 'r') as file:
@@ -27,8 +31,6 @@ def load_lcquad():
 def load_simplequestions():
     # @TODO: this
     raise NotImplementedError
-
-
 
 
 if __name__ == '__main__':
