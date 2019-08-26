@@ -10,7 +10,7 @@ from tqdm import tqdm
 sys.path.append('./auto')
 
 # Local/Custom imports
-from utilities import load_lcquad, InflectionError
+from utilities import load_lcquad, InflectionError, save_auto
 from auto import rules
 
 # Important globals
@@ -37,12 +37,15 @@ for rule_name, rule_prob in rules_dist['distribution'].items():
     rule_obj = getattr(rules, rule_name)(nlp)
     rules_dist['distribution'][rule_name] = (rule_prob, rule_obj)
 
+# Add configuration and other metadata to file
+lcquad['_config'] = config
+lcquad['_rule_application_distribution'] = [x for x in rules_dists if x['_profile'] == RULES_PROFILE][0]
+
 '''
     Now loop over the dataset(s) and inflect it.
 '''
-
 # LC-QuAD inflections
-for i, datum in enumerate(lcquad['raw']['train']):
+for i, datum in tqdm(enumerate(lcquad['raw']['train']), total=len(lcquad['raw']['train'])):
     raw, inflected = datum['corrected_question'], []
     for rule_name, (rule_prob, rule_obj) in rules_dist['distribution'].items():
         # Make a doc of input
@@ -56,8 +59,25 @@ for i, datum in enumerate(lcquad['raw']['train']):
 
     lcquad['auto'].setdefault('train', []).append(inflected)
 
-print(lcquad['auto']['train'][0:10])
+# LC-QuAD inflections
+for i, datum in tqdm(enumerate(lcquad['raw']['test']), total=len(lcquad['raw']['test'])):
+    raw, inflected = datum['corrected_question'], []
+    for rule_name, (rule_prob, rule_obj) in rules_dist['distribution'].items():
+        # Make a doc of input
+        raw_spacied = nlp(raw)
+        try:
+            inflected.append([rule_name, rule_obj.apply(raw_spacied, rule_prob)])
+        except TypeError:
+            traceback.print_exc()
+            print(raw)
+            raise InflectionError
 
+    lcquad['auto'].setdefault('test', []).append(inflected)
+
+# Dump this in the `data/auto` dir
+save_auto('lcquad', lcquad)
+
+print(lcquad.keys())
 
 
 
